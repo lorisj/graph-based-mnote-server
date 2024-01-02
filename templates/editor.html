@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ace Editor - LaTeX Mode</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/editor.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+</head>
+<body>
+
+<div id="editor">
+\begin{equation}
+  E = mc^2
+\end{equation}
+</div>
+
+<!-- Compile Button -->
+<div id="compile-button-container">
+    <button id="compile-button">Compile</button>
+</div>
+
+<script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+
+</body>
+</html>
