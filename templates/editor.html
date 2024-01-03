@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Ace Editor - LaTeX Mode</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/editor.css') }}">
+  <head>
+    <title>MNote editor</title>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css" />
+    <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css" />
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
-</head>
-<body>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/editor.css') }}" />
+  </head>
+  <body>
+    <<div class="flex-container">
+        <div id="file-browser">
+            <ul id="file-list"></ul>
+        </div>
+        <div class="layout-wrapper">
+            <div id="layout-container"></div>
+        </div>
+    </div>
 
-<div id="editor">
-\begin{equation}
-  E = mc^2
-\end{equation}
-</div>
-
-<!-- Compile Button -->
-<div id="compile-button-container">
-    <button id="compile-button">Compile</button>
-</div>
-
-<script src="{{ url_for('static', filename='js/editor.js') }}"></script>
-
-</body>
+    <script src="{{ url_for('static', filename = 'js/editor.js') }}"></script>
+    
+  </body>
 </html>
