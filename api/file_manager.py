@@ -96,3 +96,67 @@ def remove_item():
         return jsonify({"success": True, "message": "Item removed successfully"})
     except OSError as e:
         return jsonify({"success": False, "message": str(e)}), 500
+
+
+
+@file_api.route('/update-file', methods=['POST'])
+def update_file():
+    user_id = request.form.get('user_id')  # Replace with actual user identification logic
+    file_name = request.form.get('file_name')
+    new_content = request.form.get('new_content')
+
+    if not user_id or not file_name or new_content is None:
+        return jsonify({"success": False, "message": "User ID, file name and new content are required"}), 400
+
+    # Ensure filename is safe
+    file_name = secure_filename(file_name)
+    user_dir = os.path.join(BASE_DIR, user_id)
+
+    # Check if directory exists
+    if not os.path.exists(user_dir):
+        return jsonify({"success": False, "message": "User directory does not exist"}), 404
+
+    file_path = os.path.join(user_dir, file_name)
+
+    # Check if file exists
+    if not os.path.exists(file_path):
+        return jsonify({"success": False, "message": "File does not exist"}), 404
+
+    # Write new content to file
+    try:
+        with open(file_path, 'w') as file:
+            file.write(new_content)
+        return j-sonify({"success": True, "message": "File updated successfully"})
+    except OSError as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@file_api.route('/get-file', methods=['GET'])
+def get_file():
+    user_id = request.args.get('user_id')  # Replace with actual user identification logic
+    file_name = request.args.get('file_name')
+
+    if not user_id or not file_name:
+        return jsonify({"success": False, "message": "User ID and file name are required"}), 400
+
+    # Ensure filename is safe
+    file_name = secure_filename(file_name)
+    user_dir = os.path.join(BASE_DIR, user_id)
+
+    # Check if directory exists
+    if not os.path.exists(user_dir):
+        return jsonify({"success": False, "message": "User directory does not exist"}), 404
+
+    file_path = os.path.join(user_dir, file_name)
+
+    # Check if file exists
+    if not os.path.exists(file_path):
+        return jsonify({"success": False, "message": "File does not exist"}), 404
+
+    # Read file content
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+        return jsonify({"success": True, "content": content})
+    except OSError as e:
+        return jsonify({"success": False, "message": str(e)}), 500

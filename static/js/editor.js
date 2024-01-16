@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function addComponent(componentName, id, filePath) {
         // Check if a component with the same id already exists
         var exists = layout.root.getItemsById(id).length > 0;
-    
+
         if (!exists) {
             var newItemConfig = {
                 title: filePath,
@@ -67,9 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             layout.root.contentItems[0].addChild(newItemConfig);
         } else {
-            console.log('Component already open:',componentName + "-" + filePath );
+            console.log('Component already open:', componentName + "-" + filePath);
         }
-    }    
+    }
 
     // List files function
     function listFiles() {
@@ -114,6 +114,50 @@ document.addEventListener('DOMContentLoaded', function () {
                 var editor = ace.edit(editorId);
                 editor.session.setMode("ace/mode/latex");
                 editor.setTheme("ace/theme/monokai");
+            
+                // Fetch file content and set it as the editor content
+                fetch('/get-file?user_id=yourUserId&file_name=' + encodeURIComponent(file), {
+                    method: 'GET',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        editor.getSession().setValue(data.content);
+                    } else {
+                        console.log("Failed to load the file: " + data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            
+                // Add change event handler to update the file when the editor content changes
+                editor.getSession().on('change', function() {
+                    var content = editor.getSession().getValue();
+            
+                    fetch('/update-file', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            'user_id': 'yourUserId',  // Replace with actual user ID
+                            'file_name': file,  // Use the file name from the click handler
+                            'new_content': content
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log("The file was saved!");
+                        } else {
+                            console.log("Failed to save the file: " + data.message);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                });
             });
 
             var $graphButton = $('<button>').text('G').addClass('file-btn').click(function () {
@@ -183,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+    
 
 
 
