@@ -5,7 +5,10 @@ import shutil
 
 file_api = Blueprint('file_api', __name__)
 
-BASE_DIR = "/home/loris/Temp/mnote_server_files"
+# Ensure base dir exists
+BASE_DIR = "./user_files"
+if not os.path.exists(BASE_DIR):
+    os.makedirs(BASE_DIR)
 
 
 @file_api.route('/list-files', methods=['GET'])
